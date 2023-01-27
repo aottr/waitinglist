@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     pocketbasePrefix: process.env.NUXT_POCKETBASE_PREFIX || '',
     public: {
       version: '1.0.2',
+      pocketbaseHost: process.env.NUXT_POCKETBASE_HOST || '',
     },
   },
 });

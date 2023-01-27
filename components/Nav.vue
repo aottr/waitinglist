@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const { isDarkMode } = useDarkMode();
+const route = useRoute();
+const user = ref('');
 
 interface HrefItem {
   name: string;
@@ -15,9 +17,22 @@ interface navProps {
 const swapDarkMode = () => {
   isDarkMode.value = !isDarkMode.value;
 };
+const { data, refresh } = await useAsyncData<{ token: string }>(
+  'check-auth' + (route.name?.toString() || ''),
+  async () => useAuthUser()
+);
+watch(
+  () => route.fullPath,
+  () => {
+    refresh();
+    user.value = data.value?.token || '';
+  }
+);
+user.value = data.value?.token || '';
 </script>
 
 <template>
+  {{ user }}
   <div class="navbar bg-base-300">
     <div class="container mx-auto">
       <div class="flex-1">
@@ -25,7 +40,20 @@ const swapDarkMode = () => {
           >Waitinglist</NuxtLink
         >
       </div>
-      <div class="flex-none"></div>
+      <div class="flex-none mr-4">
+        <div v-if="user">
+          <NuxtLink to="/dashboard" class="btn btn-ghost normal-case"
+            >Dashboard</NuxtLink
+          >
+          <NuxtLink to="/dashboard/logout" class="btn btn-ghost normal-case"
+            >Logout</NuxtLink
+          >
+        </div>
+        <div v-else>
+          <a href="/dashboard/login" class="btn btn-ghost normal-case">Login</a>
+        </div>
+      </div>
+
       <label class="swap swap-rotate btn btn-circle">
         <input
           type="checkbox"
