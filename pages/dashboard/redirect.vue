@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import PocketBase from 'pocketbase';
-const config = useRuntimeConfig();
+import { Record } from 'pocketbase';
 
+const config = useRuntimeConfig();
 interface GoogleQuery {
   state: string;
   code: string;
 }
 const query = useRoute().query as unknown as GoogleQuery;
 
-const pb = new PocketBase(config.pocketbaseHost);
+const pb = useNuxtApp().$pb;
 const redirectUrl = 'http://localhost:3000/dashboard/redirect';
 const cookie = useCookie('auth');
 

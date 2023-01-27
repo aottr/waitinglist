@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute();
 const slug = route.params.slug;
-
+console.log('route', route.params.slug);
 const lists = (await $fetch('/api/waitinglists')).data;
 const list = lists.find((list) => list.slug == slug);
 if (!list) clearError({ redirect: '/' });
